@@ -1,7 +1,6 @@
 #!/usr/bin/env ruby
 
 require 'slack'
-require 'optparse'
 
 class SlackFileDeleter
   def initialize(name, token, opts = {})

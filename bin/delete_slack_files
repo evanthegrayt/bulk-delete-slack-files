@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 
 require 'yaml'
+require 'optparse'
 require_relative '../lib/slack_file_deleter.rb'
 
 opts  = {}
