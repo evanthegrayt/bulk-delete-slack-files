@@ -1,6 +1,5 @@
 #!/usr/bin/env ruby
 
-require 'yaml'
 require 'optparse'
 require 'slack'
 
@@ -58,14 +57,13 @@ class SlackFileDeleter
 end
 
 if $PROGRAM_NAME == __FILE__
-  def usage
-    <<-EOF.gsub(/^\s*>/, '')
-    >You need to pass your name and token,\n
-    >or set them as environmental varibales!\n
-    >    export SLACK_NAME='YOUR_SLACK_NAME'\n
+  TOKEN_NAME_ERROR = <<-EOF.gsub(/^\s*>/, '')
+    >You need to pass your name and token,
+    >or set them as environmental varibales!
+    >    export SLACK_NAME='YOUR_SLACK_NAME'
     >    export SLACK_TOKEN='YOUR_SLACK_TOKEN'
-    EOF
-  end
+  EOF
+
   opts = {}
 
   OptionParser.new do |o|
@@ -85,11 +83,7 @@ if $PROGRAM_NAME == __FILE__
   name  = opts[:name]  || ENV['SLACK_NAME']
   token = opts[:token] || ENV['SLACK_TOKEN']
 
-  [name, token].each do |e|
-    if e.nil? || e.empty?
-      abort(usage)
-    end
-  end
+  [name, token].each { |e| abort(TOKEN_NAME_ERROR) if e.nil? || e.empty? }
 
   slack_deleter = SlackFileDeleter.new(name, token, opts)
 
