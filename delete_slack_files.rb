@@ -50,6 +50,9 @@ class SlackFileDeleter
     @uid ||= @client.users_list['members'].select do |m|
       m['profile']['real_name'] == @name
     end.first['id']
+  rescue NoMethodError
+    puts "Incorrect Token or User Name!"
+    exit 1
   end
 
   def date
