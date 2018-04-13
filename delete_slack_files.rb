@@ -4,10 +4,14 @@ require 'optparse'
 require 'slack'
 
 class SlackFileDeleter
+
+  attr_reader :delete_count
+
   def initialize(name, token, opts = {})
-    @name   = name
-    @client = Slack::Client.new(token: token)
-    @opts   = opts
+    @name         = name
+    @client       = Slack::Client.new(token: token)
+    @opts         = opts
+    @delete_count = 0
 
     @opts[:test]  ||= false
     @opts[:count] ||= 1000
@@ -15,15 +19,17 @@ class SlackFileDeleter
   end
 
   def delete_all_old_files
-    del_count = 0
     file_list.each do |file|
       if meets_requirements?(file)
         puts "#{delete_word}: [#{file['name']}]"
         delete_file(file) unless @opts[:test]
-        del_count += 1
+        @delete_count += 1
       end
     end
-    puts "\n#{del_count} Files #{delete_word}."
+  end
+
+  def delete_word
+    @opts[:test] ? 'To Delete' : 'Deleted'
   end
 
   private
@@ -44,10 +50,6 @@ class SlackFileDeleter
     @uid ||= @client.users_list['members'].select do |m|
       m['profile']['real_name'] == @name
     end.first['id']
-  end
-
-  def delete_word
-    @opts[:test] ? 'To Delete' : 'Deleted'
   end
 
   def date
@@ -88,6 +90,8 @@ if $PROGRAM_NAME == __FILE__
   slack_deleter = SlackFileDeleter.new(name, token, opts)
 
   slack_deleter.delete_all_old_files
+
+  puts "#{slack_deleter.delete_count} Files #{slack_deleter.delete_word}"
 
 end
 
