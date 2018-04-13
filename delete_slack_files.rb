@@ -3,7 +3,11 @@
 require 'optparse'
 require 'slack'
 
+class SlackCredentialError < StandardError; end
+
 class SlackFileDeleter
+
+  INVALID_CREDENTIALS_MSG = "Incorrect Token or User Name!".freeze
 
   attr_reader :delete_count
 
@@ -47,11 +51,14 @@ class SlackFileDeleter
   end
 
   def uid
-    @uid ||= @client.users_list['members'].select do |m|
-      m['profile']['real_name'] == @name
-    end.first['id']
-  rescue NoMethodError
-    raise "Incorrect Token or User Name!"
+    @uid ||=
+      begin
+        uid = @client.users_list['members'].select do |m|
+          m['profile']['real_name'] == @name
+        end
+        raise SlackCredentialError, INVALID_CREDENTIALS_MSG if uid.empty?
+        uid.first['id']
+      end
   end
 
   def date
