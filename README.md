@@ -22,7 +22,6 @@ export SLACK_TOKEN="SLACK TOKEN"
 ### Usage
 - You can modify the file to be executable and put in your path, or call it
 explicitly with `ruby delete_slack_files.rb`
-- Run this with `-h` for help, `-t` for test, or no opts to actually delete
-files.
-- Run with `-h` for all available options
+- Run this with `-t` for test, or no arguments to actually delete files.
+- Run with `-h` to see all available options
 
