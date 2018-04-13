@@ -51,8 +51,7 @@ class SlackFileDeleter
       m['profile']['real_name'] == @name
     end.first['id']
   rescue NoMethodError
-    puts "Incorrect Token or User Name!"
-    exit 1
+    raise "Incorrect Token or User Name!"
   end
 
   def date
