@@ -9,7 +9,7 @@ class SlackFileDeleter
 
   INVALID_CREDENTIALS_MSG = "Incorrect Token or User Name!".freeze
 
-  attr_reader :delete_count
+  attr_reader :delete_count, :delete_word
 
   def initialize(name, token, opts = {})
     @name         = name
@@ -20,6 +20,8 @@ class SlackFileDeleter
     @opts[:test]  ||= false
     @opts[:count] ||= 1000
     @opts[:days]  ||= 30
+
+    @delete_word = @opts[:test] ? 'To Delete' : 'Deleted'
   end
 
   def delete_all_old_files
@@ -30,10 +32,6 @@ class SlackFileDeleter
         @delete_count += 1
       end
     end
-  end
-
-  def delete_word
-    @opts[:test] ? 'To Delete' : 'Deleted'
   end
 
   private
