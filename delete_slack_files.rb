@@ -2,12 +2,14 @@
 
 require 'optparse'
 require 'slack'
+require 'logger'
 
 class SlackCredentialError < StandardError; end
 
 class SlackFileDeleter
 
   INVALID_CREDENTIALS_MSG = "Incorrect Token or User Name!".freeze
+  MB = 1_000_000
 
   attr_reader :delete_count, :delete_word
 
@@ -16,6 +18,8 @@ class SlackFileDeleter
     @client       = Slack::Client.new(token: token)
     @opts         = opts
     @delete_count = 0
+    @delete_fsize = 0
+    @logger       = Logger.new(File.join(__dir__, 'slack.log'), 0, 1048576)
 
     @opts[:test]  ||= false
     @opts[:count] ||= 1000
@@ -27,11 +31,22 @@ class SlackFileDeleter
   def delete_all_old_files
     file_list.each do |file|
       if meets_requirements?(file)
-        puts "#{delete_word}: [#{file['name']}]"
+        log_it("#{delete_word}: [#{file['name']}] " \
+               "(#{(file['size'].to_f / MB).round(2)} MB)")
+        @delete_fsize += file['size']
         delete_file(file) unless @opts[:test]
         @delete_count += 1
       end
     end
+  end
+
+  def log_it(msg, level = :info)
+    @logger.send(level, msg)
+    puts "#{Time.now} #{level.upcase}: #{msg}"
+  end
+
+  def fsize
+    (@delete_fsize.to_f / MB).round(2)
   end
 
   private
@@ -98,7 +113,8 @@ if $PROGRAM_NAME == __FILE__
 
   slack_deleter.delete_all_old_files
 
-  puts "#{slack_deleter.delete_count} Files #{slack_deleter.delete_word}"
+  slack_deleter.log_it(
+    "#{slack_deleter.delete_count} Files #{slack_deleter.delete_word} " \
+    "- Total Space: #{slack_deleter.fsize} MB")
 
 end
-
