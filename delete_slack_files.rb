@@ -4,11 +4,11 @@ require 'optparse'
 require 'slack'
 require 'logger'
 
-class SlackCredentialError < StandardError; end
-
 class SlackFileDeleter
 
-  INVALID_CREDENTIALS_MSG = "Incorrect Token or User Name!".freeze
+  SlackCredentialError = Class.new(StandardError)
+
+  INVALID_CREDENTIALS_MSG = 'Incorrect Token or User Name!'.freeze
   MB = 1_000_000
 
   attr_reader :delete_count, :delete_word
@@ -19,7 +19,8 @@ class SlackFileDeleter
     @opts         = opts
     @delete_count = 0
     @delete_fsize = 0
-    @logger       = Logger.new(File.join(__dir__, 'slack.log'), 0, 1048576)
+
+    @logger = Logger.new(File.join(__dir__, 'log', 'slack.log'), 0, 1048576)
 
     @opts[:test]  ||= false
     @opts[:count] ||= 1000
@@ -32,7 +33,7 @@ class SlackFileDeleter
     file_list.each do |file|
       if meets_requirements?(file)
         log_it("#{delete_word}: [#{file['name']}] " \
-               "(#{(file['size'].to_f / MB).round(2)} MB)")
+               "(#{(file['size'].to_f / MB).round(4)} MB)")
         @delete_fsize += file['size']
         delete_file(file) unless @opts[:test]
         @delete_count += 1
@@ -46,7 +47,7 @@ class SlackFileDeleter
   end
 
   def fsize
-    (@delete_fsize.to_f / MB).round(2)
+    (@delete_fsize.to_f / MB).round(4)
   end
 
   private
@@ -94,14 +95,14 @@ if $PROGRAM_NAME == __FILE__
     o.on('-l', '--[no-]list',
          "List files to delete; don't delete") { |v| opts[:test] = v }
     o.on('-t', '--[no-]test', "Same as '-l'") { |v| opts[:test] = v }
-    o.on('-T', '--token=TOKEN', "Manually pass TOKEN") { |v| opts[:token] = v }
-    o.on('-N', '--name=NAME', "Manually pass NAME") { |v| opts[:name] = v }
+    o.on('-T', '--token=TOKEN', 'Manually pass TOKEN') { |v| opts[:token] = v }
+    o.on('-N', '--name=NAME', 'Manually pass NAME') { |v| opts[:name] = v }
     o.on('-c', '--count=COUNT', Integer,
-         "Number of files to consider deleting",
-         "Default is 1000") { |v| opts[:count] = v }
+         'Number of files to consider deleting',
+         'Default is 1000') { |v| opts[:count] = v }
     o.on('-d', '--days-ago=DAYS', Integer,
-         "Number of days ago to consider deleting",
-         "Default is 30") { |v| opts[:days] = v }
+         'Number of days ago to consider deleting',
+         'Default is 30') { |v| opts[:days] = v }
   end.parse!
 
   name  = opts[:name]  || ENV['SLACK_NAME']
@@ -118,3 +119,4 @@ if $PROGRAM_NAME == __FILE__
     "- Total Space: #{slack_deleter.fsize} MB")
 
 end
+
