@@ -105,8 +105,8 @@ if $PROGRAM_NAME == __FILE__
          'Default is 30') { |v| opts[:days] = v }
   end.parse!
 
-  name  = opts[:name]  || ENV['SLACK_NAME']
-  token = opts[:token] || ENV['SLACK_TOKEN']
+  name  = opts.fetch(:name,  ENV['SLACK_NAME'])
+  token = opts.fetch(:token, ENV['SLACK_TOKEN'])
 
   [name, token].each { |e| abort(TOKEN_NAME_ERROR) if e.nil? || e.empty? }
 
