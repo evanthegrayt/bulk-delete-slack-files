@@ -105,10 +105,8 @@ if $PROGRAM_NAME == __FILE__
          'Default is 30') { |v| opts[:days] = v }
   end.parse!
 
-  name  = opts.fetch(:name,  ENV['SLACK_NAME'])
-  token = opts.fetch(:token, ENV['SLACK_TOKEN'])
-
-  [name, token].each { |e| abort(TOKEN_NAME_ERROR) if e.nil? || e.empty? }
+  name  = opts.fetch(:name)  { ENV['SLACK_NAME']  || abort(TOKEN_NAME_ERROR) }
+  token = opts.fetch(:token) { ENV['SLACK_TOKEN'] || abort(TOKEN_NAME_ERROR) }
 
   slack_deleter = SlackFileDeleter.new(name, token, opts)
 
