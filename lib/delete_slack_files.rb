@@ -20,7 +20,8 @@ class SlackFileDeleter
     @delete_count = 0
     @delete_fsize = 0
 
-    @logger = Logger.new(File.join(__dir__, 'log', 'slack.log'), 0, 1048576)
+    @logger = Logger.new(File.join(
+      File.dirname(File.realpath(__FILE__)), '..', 'log', 'slack.log')).freeze
 
     @opts[:test]  ||= false
     @opts[:count] ||= 1000
@@ -78,43 +79,6 @@ class SlackFileDeleter
   def date
     Time.now - @opts[:days] * 24 * 60 * 60
   end
-
-end
-
-if $PROGRAM_NAME == __FILE__
-  TOKEN_NAME_ERROR = <<-EOF.gsub(/^\s*>/, '')
-    >You need to pass your name and token,
-    >or set them as environmental varibales!
-    >    export SLACK_NAME='YOUR_SLACK_NAME'
-    >    export SLACK_TOKEN='YOUR_SLACK_TOKEN'
-  EOF
-
-  opts = {}
-
-  OptionParser.new do |o|
-    o.on('-l', '--[no-]list',
-         "List files to delete; don't delete") { |v| opts[:test] = v }
-    o.on('-t', '--[no-]test', "Same as '-l'") { |v| opts[:test] = v }
-    o.on('-T', '--token=TOKEN', 'Manually pass TOKEN') { |v| opts[:token] = v }
-    o.on('-N', '--name=NAME', 'Manually pass NAME') { |v| opts[:name] = v }
-    o.on('-c', '--count=COUNT', Integer,
-         'Number of files to consider deleting',
-         'Default is 1000') { |v| opts[:count] = v }
-    o.on('-d', '--days-ago=DAYS', Integer,
-         'Number of days ago to consider deleting',
-         'Default is 30') { |v| opts[:days] = v }
-  end.parse!
-
-  name  = opts.fetch(:name)  { ENV['SLACK_NAME']  || abort(TOKEN_NAME_ERROR) }
-  token = opts.fetch(:token) { ENV['SLACK_TOKEN'] || abort(TOKEN_NAME_ERROR) }
-
-  slack_deleter = SlackFileDeleter.new(name, token, opts)
-
-  slack_deleter.delete_all_old_files
-
-  slack_deleter.log_it(
-    "#{slack_deleter.delete_count} Files #{slack_deleter.delete_word} " \
-    "- Total Space: #{slack_deleter.fsize} MB")
 
 end
 

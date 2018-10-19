@@ -4,6 +4,9 @@ Ruby script that utilizes the Slack API to delete multiple files on Slack
 ### Installation
 - Clone the repository
 `git clone https://github.com/evanthegrayt/delete-multiple-slack-files.git`
+- If using Rake (`gem install rake`) run `rake` from the base directory;
+otherwise, run
+`ln -s $PWD/bin/delete_slack_files /usr/local/bin/delete_slack_files`
 - Install the `slack-api` gem, version `1.6.0`
   - If you have [bundler](https://bundler.io/) installed, run `bundle install`
   from the root directory of the repo.
