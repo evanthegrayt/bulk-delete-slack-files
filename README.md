@@ -1,9 +1,12 @@
-# delete-multiple-slack-files
-Ruby script that utilizes the Slack API to delete multiple files on Slack
+# Bulk Delete Slack Files
+Ruby script that utilizes the Slack API to bulk-delete files on Slack.
+Useful for people who use the free version of Slack and have a storage size
+limit, which requires you to bulk-delete files (which they conveniently don't
+have an easy way to do...)
 
 ### Installation
 - Clone the repository
-`git clone https://github.com/evanthegrayt/delete-multiple-slack-files.git`
+`git clone https://github.com/evanthegrayt/bulk-delete-slack-files.git`
 - If using Rake (`gem install rake`) run `rake` from the base directory;
 otherwise, run
 `ln -s $PWD/bin/delete_slack_files /usr/local/bin/delete_slack_files`
