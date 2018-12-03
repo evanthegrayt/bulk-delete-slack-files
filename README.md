@@ -42,4 +42,7 @@ pass `-T [TOKEN] -N [NAME]` at runtime.
 ## Reporting Bugs
 If you find any bugs, or anything that could be improved, please [submit an
 issue](https://github.com/evanthegrayt/bulk-delete-slack-files/issues/new).
+My company no longer uses Slack, so this script probably won't be updated much
+or given new features unless issues are submitted. If people make issues, I will
+update the code.
 
