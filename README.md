@@ -29,8 +29,8 @@ export SLACK_TOKEN="SLACK TOKEN"
 ```
 
 ## Usage
-- If you installed via `rake`, or linked to `usr/local/bin`, you should be able
-to call the executable.
+- If you installed via `rake`, or manually linked to a directory in your
+`$PATH`, you should be able to call the executable.
 ```sh
 delete_slack_files -t
 ```
