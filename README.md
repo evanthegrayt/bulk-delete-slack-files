@@ -4,7 +4,10 @@ Useful for people who use the free version of Slack and have a storage size
 limit, which requires you to bulk-delete files (which they conveniently don't
 have an easy way to do...)
 
-### Installation
+By default, the program will delete files older than 30 days, or the last 1,000
+files, whichever limit is hit first. These are configurable through options.
+
+## Installation
 - Clone the repository
 `git clone https://github.com/evanthegrayt/bulk-delete-slack-files.git`
 - If using Rake (`gem install rake`) run `rake` from the base directory;
@@ -25,11 +28,15 @@ export SLACK_NAME="REAL NAME" # Make sure to use "Real Name" from Slack
 export SLACK_TOKEN="SLACK TOKEN"
 ```
 
-### Usage
+## Usage
 - You can modify the file to be executable and put in your path, or call it
 explicitly with `ruby delete_slack_files.rb`
 - If you don't want to export your name and token as environmental variables,
 pass `-T [TOKEN] -N [NAME]` at runtime.
-- Run this with `-t` for test, or no arguments to actually delete files.
+- Run with `-t` for test, or no arguments to actually delete files.
 - Run with `-h` to see all available options
+
+## Reporting Bugs
+If you find any bugs, or anything that could be improved, please [submit an
+issue](https://github.com/evanthegrayt/bulk-delete-slack-files/issues/new).
 
