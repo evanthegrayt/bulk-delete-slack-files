@@ -4,8 +4,9 @@ Useful for people who use the free version of Slack and have a storage size
 limit, which requires you to bulk-delete files (which they conveniently don't
 have an easy way to do...)
 
-By default, the program will delete files older than 30 days, or the last 1,000
-files, whichever limit is hit first. These are configurable through options.
+By default, the program will delete files older than 30 days, or the oldest
+1,000 files, whichever limit is hit first. These are configurable through
+options.
 
 ## Installation
 - Clone the repository
