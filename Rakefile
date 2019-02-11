@@ -6,6 +6,7 @@ task :default => :install
 desc "Install to `/usr/local/bin`"
 task :install do
   File.symlink(LINK_FROM, LINK_TO)
+  sh('bundle install')
 end
 
 desc "Uninstall..."
