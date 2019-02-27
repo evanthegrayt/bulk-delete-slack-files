@@ -1,5 +1,6 @@
 INSTALL_PATH = File.expand_path(File.join(File.dirname(__FILE__)), '..').freeze
-LINK_TO = File.join('/', 'usr', 'local', 'bin', 'delete_slack_files').freeze
+LINK_TO = File.join(
+  File::SEPARATOR, 'usr', 'local', 'bin', 'delete_slack_files').freeze
 LINK_FROM = File.join(INSTALL_PATH, 'bin', 'delete_slack_files').freeze
 task :default => :install
 
