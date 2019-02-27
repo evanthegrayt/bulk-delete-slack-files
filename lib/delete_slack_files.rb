@@ -30,13 +30,12 @@ class SlackFileDeleter
 
   def delete_all_old_files
     file_list.each do |file|
-      if meets_requirements?(file)
-        log_it("#{delete_word}: [#{file['name']}] " \
-               "(#{(file['size'].to_f / MB).round(4)} MB)")
-        @delete_fsize += file['size']
-        delete_file(file) unless @opts[:test]
-        @delete_count += 1
-      end
+      next unless meets_requirements?(file)
+      log_it("#{delete_word}: [#{file['name']}] " \
+             "(#{(file['size'].to_f / MB).round(4)} MB)")
+      @delete_fsize += file['size']
+      delete_file(file) unless @opts[:test]
+      @delete_count += 1
     end
   end
 
@@ -64,14 +63,12 @@ class SlackFileDeleter
   end
 
   def uid
-    @uid ||=
-      begin
-        uid = @client.users_list['members'].select do |m|
-          m['profile']['real_name'] == @name
-        end
-        raise SlackCredentialError, INVALID_CREDENTIALS_MSG if uid.empty?
-        uid.first['id']
-      end
+    return @uid if @uid
+    uid = @client.users_list['members'].select do |m|
+      m['profile']['real_name'] == @name
+    end
+    raise SlackCredentialError, INVALID_CREDENTIALS_MSG if uid.empty?
+    @uid = uid.first['id']
   end
 
   def date
