@@ -11,6 +11,7 @@ GEM
       websocket-driver (>= 0.5.1)
     multi_json (1.13.1)
     multipart-post (2.0.0)
+    rake (12.3.2)
     slack-api (1.6.0)
       faraday (~> 0.11)
       faraday_middleware (~> 0.10.0)
@@ -24,7 +25,8 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  rake!
   slack-api (= 1.6.0)!
 
 BUNDLED WITH
-   1.16.1
+   1.17.1
