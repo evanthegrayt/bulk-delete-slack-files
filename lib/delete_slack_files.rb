@@ -48,8 +48,6 @@ class SlackFileDeleter
     (@delete_fsize.to_f / MB).round(4)
   end
 
-  private
-
   def delete_file(file)
     @client.files_delete(file: file['id'])
   end
@@ -74,6 +72,12 @@ class SlackFileDeleter
   def date
     Time.now - @opts[:days] * 24 * 60 * 60
   end
+
+  private :delete_file
+  private :file_list
+  private :meets_requirements?
+  private :uid
+  private :date
 
 end
 
