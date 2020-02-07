@@ -47,3 +47,8 @@ My company no longer uses Slack, so this script probably won't be updated much
 or given new features unless issues are submitted. If people make issues, I will
 update the code.
 
+## Self Promotion
+I do these projects for fun, and I enjoy knowing that they're helpful to people.
+Consider starring [the
+repository](https://github.com/evanthegrayt/bulk-delete-slack-files) if you like
+it! If you love it, follow me [on github](https://github.com/evanthegrayt)!
